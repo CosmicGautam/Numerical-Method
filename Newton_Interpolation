@@ -1,0 +1,42 @@
+ #include <stdio.h>
+#define MAX_POINTS 10
+float newtonInterpolation(float x[], float y[], int n, float xp);
+int main() {
+    int n,i;
+    float x[MAX_POINTS], y[MAX_POINTS], xp;
+    printf("Enter the number of data points (maximum %d): ", MAX_POINTS);
+    scanf("%d", &n);
+    printf("Enter the data points (x, y):\n");
+    for (i = 0; i < n; i++) {
+        printf("x[%d] = ", i);
+        scanf("%f", &x[i]);
+        printf("y[%d] = ", i);
+        scanf("%f", &y[i]);
+    }
+    printf("Enter the interpolation point: ");
+    scanf("%f", &xp);
+    float interpolatedValue = newtonInterpolation(x, y, n, xp);
+    printf("Interpolated value at x = %.2f is %.2f\n", xp, interpolatedValue);
+    return 0;
+}
+float newtonInterpolation(float x[], float y[], int n, float xp) {
+    float yp = 0;
+    float f[n][n];
+	int i,j;
+    for (i = 0; i < n; i++) {
+        f[i][0] = y[i];
+    }
+    for (j = 1; j < n; j++) {
+        for (i = 0; i < n - j; i++) {
+            f[i][j] = (f[i + 1][j - 1] - f[i][j - 1]) / (x[i + j] - x[i]);
+        }
+    }
+    for (j = 0; j < n; j++) {
+        float term = f[0][j];
+        for (i = 0; i < j; i++) {
+            term *= (xp - x[i]);
+        }
+        yp += term;
+    }
+    return yp;
+}
