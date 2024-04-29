@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <math.h>
+#define N 3 
+void printMatrix(float mat[][N + 1]) {
+	int i,j;
+    for (i = 0; i < N; i++) {
+        for (j = 0; j <= N; j++) {
+            printf("%.2f ", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+void gaussElimination(float mat[][N + 1]) {
+	int i,k,j;
+    for (i = 0; i < N - 1; i++) {
+        int max_row = i;
+        for (k = i + 1; k < N; k++) {
+            if (fabs(mat[k][i]) > fabs(mat[max_row][i])) {
+                max_row = k;
+            }
+        }
+        if (max_row != i) {
+            for (k = i; k <= N; k++) {
+                float temp = mat[i][k];
+                mat[i][k] = mat[max_row][k];
+                mat[max_row][k] = temp;
+            }
+        }
+        for (j = i + 1; j < N; j++) {
+            float factor = mat[j][i] / mat[i][i];
+            for (k = i; k <= N; k++) {
+                mat[j][k] -= factor * mat[i][k];
+            }
+        }
+    }
+    float x[N];
+    for (i = N - 1; i >= 0; i--) {
+        x[i] = mat[i][N];
+        for (j = i + 1; j < N; j++) {
+            x[i] -= mat[i][j] * x[j];
+        }
+        x[i] /= mat[i][i];
+    }
+    printf("Solution:\n");
+    for (i = 0; i < N; i++) {
+        printf("x%d = %.2f\n", i + 1, x[i]);
+    }
+}
+int main() {
+	int i,j;
+    float mat[N][N + 1];
+    printf("Enter the augmented matrix coefficients:\n");
+    for (i = 0; i < N; i++) {
+        printf("Equation %d coefficients (separate with spaces): ", i + 1);
+        for (j = 0; j <= N; j++) {
+            scanf("%f", &mat[i][j]);
+        }
+    }
+    gaussElimination(mat);
+    return 0;
+}
