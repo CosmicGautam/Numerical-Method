@@ -1,0 +1,26 @@
+#include <stdio.h>
+float horner(float poly[], int n, float x) {
+    float result = poly[0]; 
+	int i;
+    for (i = 1; i <= n; i++) {
+        result = result * x + poly[i];
+    }
+    return result;
+}
+int main() {
+    int n,i; 
+    printf("Enter the degree of polynomial: ");
+    scanf("%d", &n);
+    float poly[n+1]; 
+    printf("Enter the coefficients of polynomial from highest degree term to constant term:\n");
+    for (i = 0; i <= n; i++) {
+        printf("Coefficient of x^%d: ", n-i);
+        scanf("%f", &poly[i]);
+    }
+    float x; 
+    printf("Enter the value of x: ");
+    scanf("%f", &x);
+    float result = horner(poly, n, x);
+    printf("Result: %.2f\n", result);
+    return 0;
+}
